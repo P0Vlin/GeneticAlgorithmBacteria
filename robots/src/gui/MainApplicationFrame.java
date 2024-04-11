@@ -14,7 +14,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import models.Model;
+import viewModel.ViewModel;
 import log.Logger;
+import view.View;
 
 /**
  * Что требуется сделать:
@@ -26,7 +29,7 @@ public class MainApplicationFrame extends JFrame
 {
     private final JDesktopPane desktopPane = new JDesktopPane();
     
-    public MainApplicationFrame() {
+    public MainApplicationFrame() {//view
         //Make the big window be indented 50 pixels from each edge
         //of the screen.
         int inset = 50;        
@@ -41,7 +44,11 @@ public class MainApplicationFrame extends JFrame
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
+        Model model = new Model();
+        View view = new View(model);
+        ViewModel viewModel = new ViewModel(model, view);
+
+        GameWindow gameWindow = new GameWindow(viewModel);
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 
@@ -49,7 +56,7 @@ public class MainApplicationFrame extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
-    protected LogWindow createLogWindow()
+    protected LogWindow createLogWindow() //view
     {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
         logWindow.setLocation(10,10);
@@ -60,7 +67,7 @@ public class MainApplicationFrame extends JFrame
         return logWindow;
     }
     
-    protected void addWindow(JInternalFrame frame)
+    protected void addWindow(JInternalFrame frame) //view
     {
         desktopPane.add(frame);
         frame.setVisible(true);
@@ -95,7 +102,7 @@ public class MainApplicationFrame extends JFrame
 //        return menuBar;
 //    }
     
-    private JMenuBar generateMenuBar()
+    private JMenuBar generateMenuBar()//view
     {
         JMenuBar menuBar = new JMenuBar();
         
@@ -140,7 +147,7 @@ public class MainApplicationFrame extends JFrame
         return menuBar;
     }
     
-    private void setLookAndFeel(String className)
+    private void setLookAndFeel(String className)//?
     {
         try
         {

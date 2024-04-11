@@ -27,7 +27,7 @@ public class LogWindowSource
         m_listeners = new ArrayList<LogChangeListener>();
     }
     
-    public void registerListener(LogChangeListener listener)
+    public void registerListener(LogChangeListener listener) //model
     {
         synchronized(m_listeners)
         {
@@ -36,7 +36,7 @@ public class LogWindowSource
         }
     }
     
-    public void unregisterListener(LogChangeListener listener)
+    public void unregisterListener(LogChangeListener listener) //model
     {
         synchronized(m_listeners)
         {
@@ -45,7 +45,7 @@ public class LogWindowSource
         }
     }
     
-    public void append(LogLevel logLevel, String strMessage)
+    public void append(LogLevel logLevel, String strMessage) //model
     {
         LogEntry entry = new LogEntry(logLevel, strMessage);
         m_messages.add(entry);
@@ -70,9 +70,9 @@ public class LogWindowSource
     public int size()
     {
         return m_messages.size();
-    }
+    } //model
 
-    public Iterable<LogEntry> range(int startFrom, int count)
+    public Iterable<LogEntry> range(int startFrom, int count) //model
     {
         if (startFrom < 0 || startFrom >= m_messages.size())
         {

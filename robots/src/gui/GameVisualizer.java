@@ -33,9 +33,9 @@ public class GameVisualizer extends JPanel
     private static final double maxVelocity = 0.1; 
     private static final double maxAngularVelocity = 0.001; 
     
-    public GameVisualizer() 
+    public GameVisualizer() // model
     {
-        m_timer.schedule(new TimerTask()
+        m_timer.schedule(new TimerTask() // model
         {
             @Override
             public void run()
@@ -43,7 +43,7 @@ public class GameVisualizer extends JPanel
                 onRedrawEvent();
             }
         }, 0, 50);
-        m_timer.schedule(new TimerTask()
+        m_timer.schedule(new TimerTask() //model
         {
             @Override
             public void run()
@@ -51,10 +51,10 @@ public class GameVisualizer extends JPanel
                 onModelUpdateEvent();
             }
         }, 0, 10);
-        addMouseListener(new MouseAdapter()
+        addMouseListener(new MouseAdapter() // model
         {
             @Override
-            public void mouseClicked(MouseEvent e)
+            public void mouseClicked(MouseEvent e) //Viewmodel
             {
                 setTargetPosition(e.getPoint());
                 repaint();
@@ -63,25 +63,25 @@ public class GameVisualizer extends JPanel
         setDoubleBuffered(true);
     }
 
-    protected void setTargetPosition(Point p)
+    protected void setTargetPosition(Point p) //model
     {
         m_targetPositionX = p.x;
         m_targetPositionY = p.y;
     }
     
-    protected void onRedrawEvent()
+    protected void onRedrawEvent() //model
     {
         EventQueue.invokeLater(this::repaint);
     }
 
-    private static double distance(double x1, double y1, double x2, double y2)
+    private static double distance(double x1, double y1, double x2, double y2) //model
     {
         double diffX = x1 - x2;
         double diffY = y1 - y2;
         return Math.sqrt(diffX * diffX + diffY * diffY);
     }
     
-    private static double angleTo(double fromX, double fromY, double toX, double toY)
+    private static double angleTo(double fromX, double fromY, double toX, double toY) //model
     {
         double diffX = toX - fromX;
         double diffY = toY - fromY;
@@ -89,7 +89,7 @@ public class GameVisualizer extends JPanel
         return asNormalizedRadians(Math.atan2(diffY, diffX));
     }
     
-    protected void onModelUpdateEvent()
+    protected void onModelUpdateEvent() //model
     {
         double distance = distance(m_targetPositionX, m_targetPositionY, 
             m_robotPositionX, m_robotPositionY);
@@ -112,7 +112,7 @@ public class GameVisualizer extends JPanel
         moveRobot(velocity, angularVelocity, 10);
     }
     
-    private static double applyLimits(double value, double min, double max)
+    private static double applyLimits(double value, double min, double max)// model
     {
         if (value < min)
             return min;
@@ -121,7 +121,7 @@ public class GameVisualizer extends JPanel
         return value;
     }
     
-    private void moveRobot(double velocity, double angularVelocity, double duration)
+    private void moveRobot(double velocity, double angularVelocity, double duration) //model
     {
         velocity = applyLimits(velocity, 0, maxVelocity);
         angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
@@ -145,7 +145,7 @@ public class GameVisualizer extends JPanel
         m_robotDirection = newDirection;
     }
 
-    private static double asNormalizedRadians(double angle)
+    private static double asNormalizedRadians(double angle) //model
     {
         while (angle < 0)
         {
@@ -161,10 +161,10 @@ public class GameVisualizer extends JPanel
     private static int round(double value)
     {
         return (int)(value + 0.5);
-    }
+    } //model
     
     @Override
-    public void paint(Graphics g)
+    public void paint(Graphics g) //view
     {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g; 
@@ -172,17 +172,17 @@ public class GameVisualizer extends JPanel
         drawTarget(g2d, m_targetPositionX, m_targetPositionY);
     }
     
-    private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2)
+    private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2) //?view
     {
         g.fillOval(centerX - diam1 / 2, centerY - diam2 / 2, diam1, diam2);
     }
     
-    private static void drawOval(Graphics g, int centerX, int centerY, int diam1, int diam2)
+    private static void drawOval(Graphics g, int centerX, int centerY, int diam1, int diam2) //?view
     {
         g.drawOval(centerX - diam1 / 2, centerY - diam2 / 2, diam1, diam2);
     }
     
-    private void drawRobot(Graphics2D g, int x, int y, double direction)
+    private void drawRobot(Graphics2D g, int x, int y, double direction) //view
     {
         int robotCenterX = round(m_robotPositionX); 
         int robotCenterY = round(m_robotPositionY);
@@ -198,7 +198,7 @@ public class GameVisualizer extends JPanel
         drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
     }
     
-    private void drawTarget(Graphics2D g, int x, int y)
+    private void drawTarget(Graphics2D g, int x, int y) //view
     {
         AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0); 
         g.setTransform(t);
