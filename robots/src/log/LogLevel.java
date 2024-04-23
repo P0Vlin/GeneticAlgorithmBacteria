@@ -1,6 +1,6 @@
 package log;
 
-public enum LogLevel
+public enum LogLevel // model
 {
     Trace(0),
     Debug(1),
