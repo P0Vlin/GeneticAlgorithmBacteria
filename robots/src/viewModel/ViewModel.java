@@ -23,7 +23,7 @@ public class ViewModel extends JPanel {
             {
                 EventQueue.invokeLater(() -> repaint());
             }
-        }, 0, 2);
+        }, 0, 50);
         timer.schedule(new TimerTask() //model
         {
             @Override
@@ -31,11 +31,11 @@ public class ViewModel extends JPanel {
             {
                 model.update();
             }
-        }, 0, 1);
+        }, 0, 10);
         addMouseListener(new MouseAdapter() // model
         {
             @Override
-            public void mouseClicked(MouseEvent e) //Viewmodel
+            public void mouseClicked(MouseEvent e)
             {
                 model.setTargetPosition(e.getPoint());
                 repaint();

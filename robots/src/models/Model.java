@@ -9,6 +9,7 @@ public class Model {
 
     public Model() {
         entities.add(new BacteriaEntity());
+        entities.add(new FieldEntity(1000, 1000, 10));
     }
 
     public List<Entity> getEntities() {

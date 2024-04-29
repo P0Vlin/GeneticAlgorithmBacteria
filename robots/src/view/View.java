@@ -2,15 +2,18 @@ package view;
 
 import models.BacteriaEntity;
 import models.Entity;
+import models.FieldEntity;
 import models.Model;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
 public class View {
     private final Model model;
-    private final Map<Class<?>, Renderer<? extends Entity>> renderersByType = Map.of(BacteriaEntity.class, new BacteriaRenderer());
+    private final Map<Class<?>, Renderer<? extends Entity>> renderersByType = Map.of(
+            BacteriaEntity.class, new BacteriaRenderer(),
+            FieldEntity.class, new FieldRenderer()
+            );
 
     public View(Model model) {
         this.model = model;
