@@ -1,77 +1,49 @@
 package models;
 
-import java.awt.*;
+import viewModel.FieldConfig;
 
-import static addons.Bacteriaaddons.*;
+import java.awt.*;
+import java.lang.reflect.Field;
+import java.util.Random;
 
 public class BacteriaEntity implements Entity {
-    private volatile double bacteriaPositionX = 100;
-    private volatile double bacteriaPositionY = 100;
-    private volatile double bacteriaDirection = 0;
+    private volatile Point bacteriaCoords = new Point(100,100);
+    private volatile Point targetCoords = new Point(150,100);
+    private volatile int cellCenterX = 100;
+    private volatile int cellCenterY = 100;
+    private FieldEntity field;
+    ModelContext.Directions directions;
 
-    private volatile int targetPositionX = 150;
-    private volatile int targetPositionY = 100;
+    public BacteriaEntity(FieldEntity field) {
+        this.field = field;
+    }
 
-    private static final double maxVelocity = 0.1;
-    private static final double maxAngularVelocity = 0.001;
-
-    public double getBacteriaPositionX(){return bacteriaPositionX;}
-    public double getBacteriaPositionY(){return bacteriaPositionY;}
-    public double getBacteriaDirection(){return bacteriaDirection;}
+    public Point getBacteriaCoords(){return bacteriaCoords;}
+    public Point getTargetCoords(){return targetCoords;}
 
     @Override
     public void update() {
-        double distance = distance(targetPositionX, targetPositionY,
-                bacteriaPositionX, bacteriaPositionY);
-        if (distance < 0.5)
-        {
-            return;
-        }
-        double velocity = maxVelocity;
-        double angleToTarget = angleTo(bacteriaPositionX, bacteriaPositionY, targetPositionX, targetPositionY);
-        double angularVelocity = 0;
-        if (angleToTarget > bacteriaDirection)
-        {
-            angularVelocity = maxAngularVelocity;
-        }
-        if (angleToTarget < bacteriaDirection)
-        {
-            angularVelocity = -maxAngularVelocity;
-        }
-
-        moveBacteria(velocity, angularVelocity, 10);
+        setBacteriaPosition(targetCoords);
+        //
     }
+     //
 
 
-
-
-
-    private void moveBacteria(double velocity, double angularVelocity, double duration) //model
-    {
-        velocity = applyLimits(velocity, 0, maxVelocity);
-        angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-        double newX = bacteriaPositionX + velocity / angularVelocity *
-                (Math.sin(bacteriaDirection + angularVelocity * duration) -
-                        Math.sin(bacteriaDirection));
-        if (!Double.isFinite(newX))
-        {
-            newX = bacteriaPositionX + velocity * duration * Math.cos(bacteriaDirection);
-        }
-        double newY = bacteriaPositionY - velocity / angularVelocity *
-                (Math.cos(bacteriaDirection + angularVelocity * duration) -
-                        Math.cos(bacteriaDirection));
-        if (!Double.isFinite(newY))
-        {
-            newY = bacteriaPositionY + velocity * duration * Math.sin(bacteriaDirection);
-        }
-        bacteriaPositionX = newX;
-        bacteriaPositionY = newY;
-        double newDirection = asNormalizedRadians(bacteriaDirection + angularVelocity * duration);
-        bacteriaDirection = newDirection;
+    public void setBacteriaPosition(Point point){
+        int x = point.x;
+        int y = point.y;
+        cellCenterX = field.getCellCenter(x);
+        cellCenterY = field.getCellCenter(y);
+        bacteriaCoords.setLocation(cellCenterX,cellCenterY);
     }
-
+    private ModelContext.Directions setRandomPosition(){
+        Random random = new Random();
+        ModelContext.Directions[] allDirections = ModelContext.Directions.values();
+        int randomIndex = random.nextInt(allDirections.length);
+        ModelContext.Directions randomDirection = allDirections[randomIndex];
+        return  randomDirection;
+    }
     public void setTarget(Point target) {
-            targetPositionX = target.x;
-            targetPositionY = target.y;
+        targetCoords.setLocation(target);
     }
 }

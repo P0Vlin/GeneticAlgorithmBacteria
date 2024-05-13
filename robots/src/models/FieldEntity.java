@@ -3,12 +3,12 @@ package models;
 public class FieldEntity implements Entity{
     private int width;
     private int height;
-    private int linescount;
+    private float cellSide;
 
-    public FieldEntity(int width, int height, int linescount){
+    public FieldEntity(int width, int height, float cellSide){
         this.width = width;
         this.height = height;
-        this.linescount = linescount;
+        this.cellSide = cellSide;
     }
 
     public int getWidth() {
@@ -19,8 +19,15 @@ public class FieldEntity implements Entity{
         return height;
     }
 
-    public int getlinescount() {
-        return linescount;
+    public float getCellSide() {
+        return cellSide;
+    }
+
+    public int getCellCenter(int x){
+        int icellSide = Math.round(cellSide);
+        int target = x/icellSide;
+        int cellCenter = target*icellSide + icellSide/2;
+        return cellCenter;
     }
 
     @Override
